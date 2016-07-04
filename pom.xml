@@ -7,10 +7,15 @@
     <version>1.0</version>
     <name>springweb</name>
     <url>http://maven.apache.org</url>
+
+
     <properties>
         <spring.version>4.3.0.RELEASE</spring.version>
-    </properties>
+        <testng.version>6.8.7</testng.version>
 
+        <!-- The main class to start by executing java -jar -->
+        <start-class>com.muks.testing.greeting.Application</start-class>
+    </properties>
 
     <!--
         Build instructions:
@@ -56,6 +61,22 @@
             <version>1.3.5.RELEASE</version>
             <scope>provided</scope>
         </dependency>
+
+
+
+        <!-- For testing purpose -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+            <scope>test</scope>
+        </dependency>
+
 
     </dependencies>
 

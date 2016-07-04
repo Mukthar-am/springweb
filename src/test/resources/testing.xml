@@ -1,0 +1,15 @@
+<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
+
+<!--<suite name="Multi-Threaded Suite" parallel="methods" thread-count="4" >-->
+
+<!--<suite name="Multi-Threaded Suite" parallel="classes" thread-count="4" >-->
+
+<suite name="Test-class Suite" >
+
+    <test name="Parallel Test Mode" group-by-instances="true">
+        <classes>
+            <class name="com.muks.testing.emailer.TestMailerTests" />
+        </classes>
+    </test>
+
+</suite>
