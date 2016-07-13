@@ -1,4 +1,4 @@
-package com.muks.testing.greeting;
+package com.muks.employee.greeting;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -8,6 +8,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by 15692 on 23/06/16.
+ *
+ * URI: http://localhost:8080/springweb-1.0/greeting?user=muks
  */
 
 @RestController

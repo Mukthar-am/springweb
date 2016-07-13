@@ -8,7 +8,9 @@
 
     <test name="Parallel Test Mode" group-by-instances="true">
         <classes>
-            <class name="com.muks.testing.emailer.TestMailerTests" />
+            <!--<class name="com.com.employee.emailer.TestMailerTests" />-->
+            <class name="com.muks.employee.employee.emailer.EmployeeTests" />
+            <class name="com.muks.employee.employee.emailer.EmployeeTests" />
         </classes>
     </test>
 

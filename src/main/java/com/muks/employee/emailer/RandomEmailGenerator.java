@@ -1,4 +1,4 @@
-package com.muks.emailer;
+package com.muks.employee.emailer;
 
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.muks.testing.greeting;
+package com.muks.employee.greeting;
 
 
 public class Greeting {
