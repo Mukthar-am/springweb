@@ -1,4 +1,4 @@
-package com.muks.employee.employee.emailer;
+package com.muks.employee.employee;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;

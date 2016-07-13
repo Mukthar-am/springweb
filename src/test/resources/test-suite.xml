@@ -1,17 +1,17 @@
-<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Suite1" verbose="1">
+    <listeners>
+        <listener class-name="org.uncommons.reportng.HTMLReporter"/>
+        <listener class-name="org.uncommons.reportng.JUnitXMLReporter"/>
+    </listeners>
+    <test name="Regression Test Suite">
+        <packages>
+            <package name="com.muks.employee.emailer"/>
+            <package name="com.muks.employee.employee"/>
+        </packages>
 
-<!--<suite name="Multi-Threaded Suite" parallel="methods" thread-count="4" >-->
-
-<!--<suite name="Multi-Threaded Suite" parallel="classes" thread-count="4" >-->
-
-<suite name="Test-class Suite" >
-
-    <test name="Parallel Test Mode" group-by-instances="true">
-        <classes>
-            <!--<class name="com.com.employee.emailer.TestMailerTests" />-->
-            <class name="com.muks.employee.employee.emailer.EmployeeTests" />
-            <class name="com.muks.employee.employee.emailer.EmployeeTests" />
-        </classes>
+        <!--<classes>-->
+        <!--<class name="com.muks.employee.employee.EmployeeTests"/>-->
+        <!--</classes>-->
     </test>
-
 </suite>
