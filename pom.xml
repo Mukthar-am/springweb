@@ -8,10 +8,15 @@
     <name>springweb</name>
     <url>http://maven.apache.org</url>
 
-    <!--
-            Build instructions:
-                - mvn clean package (to build executable jar)
-        -->
+    <!-- Build instructions:
+                - mvn clean package (to build executable jar) -->
+
+    <!-- To deploy war on local tomcat instance: mvn clean install package tomcat7:redeploy -->
+    <!-- To fix eclipse dependencies: mvn eclipse:eclipse -Dwtpversion=2.0 =>
+        To convert to Maven web project to support Eclipse IDE -->
+
+    <!-- To deploy war on remote tomcat instance: mvn clean install cargo:deployer-deploy
+        OR mvn clean install cargo:deployer-redeploy -->
 
     <properties>
         <!-- The main class to start by executing java -jar -->
@@ -20,6 +25,7 @@
         <spring.version>4.3.0.RELEASE</spring.version>
         <testng.version>6.8.7</testng.version>
         <powermock.version>1.6.5</powermock.version>
+        <webapp-name>springwebeg</webapp-name>
     </properties>
 
     <repositories>
@@ -131,6 +137,22 @@
                 </executions>
             </plugin>
 
+            <!-- Maven Tomcat Plugin -->
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <configuration>
+                    <!--<url>http://localhost:8080/manager/html</url>-->
+                    <url>http://localhost:8080/manager/text</url>
+                    <username>admin</username>
+                    <password>admin</password>
+                    <server>TomcatServer</server>
+                    <warFile>
+                        ${project.basedir}/target/${project.name}-${project.version}.war
+                    </warFile>
+                    <path>/${webapp-name}</path>
+                </configuration>
+            </plugin>
 
         </plugins>
     </build>
