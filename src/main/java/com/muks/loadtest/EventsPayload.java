@@ -1,11 +1,11 @@
-package com.muks.employee.greeting;
+package com.muks.loadtest;
 
 
-public class Greeting {
+public class EventsPayload {
     private final long id;
     private final String content;
 
-    public Greeting(long id, String content) {
+    public EventsPayload(long id, String content) {
         this.id = id;
         this.content = content;
     }
@@ -19,6 +19,6 @@ public class Greeting {
     }
 
     public String toString() {
-        return "{[GreetingId: " + id + ", GreetingContent: " + content + "]}";
+        return "{[EventId: " + id + ", GreetingContent: " + content + "]}";
     }
 }

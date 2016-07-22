@@ -1,4 +1,4 @@
-package com.muks.employee.greeting;
+package com.muks.greeting;
 
 
 import org.testng.Assert;

@@ -11,7 +11,7 @@
         </packages>
 
         <!--<classes>-->
-        <!--<class name="com.muks.employee.employee.EmployeeTests"/>-->
+        <!--<class name="EmployeeTests"/>-->
         <!--</classes>-->
     </test>
 </suite>

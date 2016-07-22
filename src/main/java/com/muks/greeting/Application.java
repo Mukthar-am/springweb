@@ -1,4 +1,4 @@
-package com.muks.employee.greeting;
+package com.muks.greeting;
 
 /**
  * Created by 15692 on 23/06/16.
