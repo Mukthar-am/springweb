@@ -1,14 +1,17 @@
 package com.muks.greeting;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.muks.loadtest.EventsPayload;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -35,14 +38,26 @@ public class GreetingController {
     @RequestMapping(value = "postPerson", method = RequestMethod.POST)
     public ResponseEntity<Greeting> greetingPost(@RequestParam(value = "name", defaultValue = "World") String name) {
         Greeting greeting = new Greeting(counter.incrementAndGet(), String.format(template, name));
-        System.out.println("# Post Controller: " + greeting.toString());
+        System.out.println("# Post Controller: Name = " + name + ", " + greeting.toString());
         return new ResponseEntity<Greeting>(greeting, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "events", method = RequestMethod.GET)
-    public ResponseEntity<EventsPayload> loadEvents(@RequestParam(value = "name", defaultValue = "World") String name) {
-        EventsPayload eventsPayload = new EventsPayload(events.incrementAndGet(), String.format(template, name));
-        return new ResponseEntity<EventsPayload>(eventsPayload, HttpStatus.OK);
+    @RequestMapping(value = "events", method = RequestMethod.POST, headers="Accept=application/json")
+    public ResponseEntity<EventsPayload> loadEvents(@RequestBody String json) {
+        EventsPayload pj = new EventsPayload();
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            pj = mapper.readValue(json, EventsPayload.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(pj.getName());
+
+//        EventsPayload eventsPayload =
+//                new EventsPayload(String.format(template, name), events.incrementAndGet(), "Ballari");
+
+        return new ResponseEntity<EventsPayload>(pj, HttpStatus.OK);
     }
 
 

@@ -2,23 +2,29 @@ package com.muks.loadtest;
 
 
 public class EventsPayload {
-    private final long id;
-    private final String content;
+    private long age;
+    private String name;
+    private String city;
 
-    public EventsPayload(long id, String content) {
-        this.id = id;
-        this.content = content;
+    public EventsPayload() {
+    }
+    public EventsPayload(String name, long age, String city) {
+        this.age = age;
+        this.name = name;
+        this.city = city;
     }
 
-    public long getId() {
-        return id;
+    public long getAge() {
+        return age;
     }
-
-    public String getContent() {
-        return content;
+    public String getName() {
+        return name;
+    }
+    public String getCity() {
+        return city;
     }
 
     public String toString() {
-        return "{[EventId: " + id + ", GreetingContent: " + content + "]}";
+        return "{[EventId: " + age + ", GreetingContent: " + name + "]}";
     }
 }
