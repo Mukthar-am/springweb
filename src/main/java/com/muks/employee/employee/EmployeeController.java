@@ -1,8 +1,14 @@
 package com.muks.employee.employee;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 /**
  * Created by 15692 on 04/07/16.
  */
+
+@RestController
+@RequestMapping("/emp")
 public class EmployeeController {
     public EmployeeService employeeService;
 
@@ -18,4 +24,5 @@ public class EmployeeController {
     public void saveEmployee(Employee employee) {
         employeeService.saveEmployee(employee);
     }
+
 }

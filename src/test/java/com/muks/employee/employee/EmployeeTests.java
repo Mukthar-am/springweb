@@ -50,7 +50,7 @@ public class EmployeeTests  {
 
     @Test
     public void verifyMethodInvokationTest() {
-        EmployeeService mock =PowerMockito.mock(EmployeeService.class);
+        EmployeeService mock = PowerMockito.mock(EmployeeService.class);
         EmployeeController employeeController = new EmployeeController(mock);
 
         Employee employee = new Employee();

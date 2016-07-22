@@ -17,4 +17,8 @@ public class Greeting {
     public String getContent() {
         return content;
     }
+
+    public String toString() {
+        return "{[GreetingId: " + id + ", GreetingContent: " + content + "]}";
+    }
 }
