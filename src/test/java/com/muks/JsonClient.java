@@ -34,7 +34,7 @@ public class JsonClient {
             HttpPost getRequest = new HttpPost("http://localhost:8080/springwebeg/track/events");
             getRequest.addHeader("accept", "application/json");
 
-            StringEntity params =new StringEntity("{\"name\":\"mukthar\",\"age\":\"20\"} ");
+            StringEntity params =new StringEntity("{\"description\":\"Muks is here\",\"name\":\"mukthar\",\"age\":\"20\", \"city\":\"Ballari\"} ");
             getRequest.setEntity(params);
 
             HttpResponse response = httpClient.execute(getRequest);
