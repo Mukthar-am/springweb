@@ -1,5 +1,9 @@
 package com.muks.loadtests;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -41,14 +48,22 @@ public class GreetingController {
      * @param json
      * @return
      */
-    @RequestMapping(value = "trackdump", method = RequestMethod.POST, headers="Accept=application/json")
-    public HttpStatus consumeEventsAndDump(@RequestBody String json,
-                                           @RequestHeader("Content-Encoding") String contentEncoding,
-                                           @RequestHeader("Content-Type") String contentType) {
-
+    @RequestMapping(value = "batchdump", method = RequestMethod.POST, headers="Accept=application/json")
+    public HttpStatus consumeBatchEventsAndDump(@RequestBody String json) {
         payloadPingsCounter.incrementAndGet();
-        System.out.println("# Track dump() : Content-Encoding: "
-                + contentEncoding + ", Content-Type: " + contentType);
+
+        JsonNode payloadTreeBatch = stringToJsonNode(json);
+
+        for (int i = 0; i < payloadTreeBatch.size(); i++) {
+            JsonNode innerArrayNode = payloadTreeBatch.get(i);
+            Iterator<Map.Entry<String, JsonNode>> innerArrNodeFields = innerArrayNode.fields();
+            while (innerArrNodeFields.hasNext()) {
+                Map.Entry<String, JsonNode> payloadInnermost = innerArrNodeFields.next();
+                if (payloadInnermost.getKey().equalsIgnoreCase("device")) {
+                    System.out.println(payloadInnermost.getValue());
+                }
+            }
+        }
 
         return (HttpStatus.OK);
     }
@@ -61,13 +76,23 @@ public class GreetingController {
      * @param json
      * @return
      */
-    @RequestMapping(value = "track-1", method = RequestMethod.POST, headers="Accept=application/json")
-    public HttpStatus baseConsumeEvents(@RequestBody String json) {
-        eventPingsCounter.incrementAndGet();
-        System.out.println("\n# Track-1() : Payload: " + json);
+    @RequestMapping(value = "trackdump", method = RequestMethod.POST, headers="Accept=application/json")
+    public HttpStatus consumeEventsAndDump(@RequestBody String json) {
+
+        payloadPingsCounter.incrementAndGet();
+
+        Iterator<Map.Entry<String, JsonNode>> payloadTree = stringToJsonNode(json).fields();
+        while (payloadTree.hasNext()) {
+            Map.Entry<String, JsonNode> payloadNode = payloadTree.next();
+
+            if (payloadNode.getKey().equalsIgnoreCase("device")) {
+                System.out.println(payloadNode.getValue());
+            }
+        }
 
         return (HttpStatus.OK);
     }
+
 
     /** ========================================================================================
      *
@@ -83,70 +108,6 @@ public class GreetingController {
 
         return (HttpStatus.OK);
     }
-
-
-    /** ========================================================================================
-     *
-     * eventPingsCounter - method which accpets a json payload and logs back the same as a http response
-     *
-     * @param
-     * @return
-     *//*
-    @RequestMapping(value = "gzip1", method = RequestMethod.POST)
-    public HttpStatus consumeGzip(@RequestBody String file) {
-        eventPingsCounter.incrementAndGet();
-
-//        String name = "test.gz";
-//
-//        if (!file.isEmpty()) {
-//            try {
-//                byte[] bytes = file.getBytes();
-//                BufferedOutputStream stream =
-//                        new BufferedOutputStream(new FileOutputStream(new File(name)));
-//                stream.write(bytes);
-//                stream.close();
-//                System.out.println("You successfully uploaded " + name + "!");
-//            } catch (Exception e) {
-//                System.out.println("You failed to upload " + name + " => " + e.getMessage());
-//            }
-//        } else {
-//            System.out.println("You failed to upload " + name + " because the file was empty.");
-//        }
-
-
-        try {
-            GZIPInputStream gis = new GZIPInputStream(new ByteArrayInputStream(file.getBytes()));
-            System.out.println(gis.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        return (HttpStatus.OK);
-    }
-
-
-
-    public static final String ROOT = "upload-dir";
-    @RequestMapping(value = "gzip", method = RequestMethod.POST)
-    public String handleFileUpload(@RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes) {
-
-        if (!file.isEmpty()) {
-            try {
-                Files.copy(file.getInputStream(), Paths.get(ROOT, file.getOriginalFilename()));
-                redirectAttributes.addFlashAttribute("message",
-                        "You successfully uploaded " + file.getOriginalFilename() + "!");
-            } catch (IOException|RuntimeException e) {
-                redirectAttributes.addFlashAttribute("message", "Failued to upload " + file.getOriginalFilename() + " => " + e.getMessage());
-            }
-        } else {
-            redirectAttributes.addFlashAttribute("message", "Failed to upload " + file.getOriginalFilename() + " because it was empty");
-        }
-
-        return "redirect:/";
-    }
-*/
 
     /**
      *  Returns the event count value via a rest GET call
@@ -192,4 +153,25 @@ public class GreetingController {
         return new ResponseEntity<Greeting>(greeting, HttpStatus.OK);
     }
 
+
+    public static JsonNode stringToJsonNode(String value) {
+        JsonNode map = null;
+        try {
+
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+            mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+            mapper.configure(JsonParser.Feature.ALLOW_MISSING_VALUES, true);
+            mapper.configure(JsonParser.Feature.ALLOW_NON_NUMERIC_NUMBERS, true);
+
+            // convert JSON string to Map
+            map = mapper.readValue(value, JsonNode.class);
+            //map = mapper.readValue(value, new TypeReference<Map<String, Object>>() {});
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return map;
+    }
 }
