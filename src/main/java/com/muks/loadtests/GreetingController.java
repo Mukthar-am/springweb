@@ -1,6 +1,7 @@
 package com.muks.loadtests;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.json.PackageVersion;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -50,20 +51,38 @@ public class GreetingController {
      */
     @RequestMapping(value = "batchdump", method = RequestMethod.POST, headers="Accept=application/json")
     public HttpStatus consumeBatchEventsAndDump(@RequestBody String json) {
+        StringBuilder strout = new StringBuilder();
+
         payloadPingsCounter.incrementAndGet();
 
         JsonNode payloadTreeBatch = stringToJsonNode(json);
 
+
+
+        if (payloadTreeBatch.size() >= 5) {
+            strout.append("[ Batch Payload of size - " + payloadTreeBatch.size() + " ");
+        } else {
+            strout.append("[ Low Payload of size - " + payloadTreeBatch.size() + " ");
+        }
+
         for (int i = 0; i < payloadTreeBatch.size(); i++) {
             JsonNode innerArrayNode = payloadTreeBatch.get(i);
             Iterator<Map.Entry<String, JsonNode>> innerArrNodeFields = innerArrayNode.fields();
+
             while (innerArrNodeFields.hasNext()) {
                 Map.Entry<String, JsonNode> payloadInnermost = innerArrNodeFields.next();
+
+                System.out.println("# Inner Array Node: \n" + innerArrayNode.get("payload").get("eventName"));
+
                 if (payloadInnermost.getKey().equalsIgnoreCase("device")) {
-                    System.out.println(payloadInnermost.getValue());
+                    String[] deviceData = payloadInnermost.getValue().toString().split(",");
+                    strout.append(", Device: " + deviceData[3] );
                 }
             }
         }
+
+        strout.append(" ]");
+        System.out.println(strout.toString());
 
         return (HttpStatus.OK);
     }
